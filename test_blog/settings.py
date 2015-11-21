@@ -38,6 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+
+    'debug_toolbar',
+    'django_extensions',
     # Useful template tags:
     # 'django.contrib.humanize',
     'cms',
@@ -58,6 +61,7 @@ INSTALLED_APPS = (
     'taggit_autosuggest',
     'admin_enhancer',
     'djangocms_blog',
+    'test_blog',
 )
 
 MIGRATION_MODULES = {
@@ -79,11 +83,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
 )
+
 TEMPLATES = [
     {
         # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
@@ -128,11 +134,21 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
             ],
         },
     },
 ]
+
+CMS_TEMPLATES = (
+    ('page.html', 'Page'),
+)
 
 WSGI_APPLICATION = 'test_blog.wsgi.application'
 
@@ -166,6 +182,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR + '/static/'
+MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
@@ -173,3 +191,5 @@ LANGUAGE_CODE = 'en'
 LANGUAGES = (
         ('en', 'English'),
 )
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
